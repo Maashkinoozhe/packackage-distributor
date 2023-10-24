@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PDist.Core.Configuration;
 using PDist.Core.Contracts;
 using PDist.Core.HostServices;
 
@@ -21,5 +22,12 @@ internal class Startup
         services.AddSingleton<IRunner, PrimaryRunner>();
 
         Trace.Listeners.Add(new ConsoleTraceListener());
+
+        AddConfigurations(services);
+    }
+
+    private void AddConfigurations(IServiceCollection services)
+    {
+        services.AddOptions<ServerOptions>().Configure<IConfiguration>((option, config) => config.GetSection("server").Bind(option));
     }
 }
