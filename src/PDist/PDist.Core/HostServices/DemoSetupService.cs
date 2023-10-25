@@ -1,6 +1,7 @@
 ﻿using PDist.Core.Contracts;
 using PDist.Database;
 using PDist.Database.Models;
+using System.Diagnostics;
 
 namespace PDist.Core.HostServices;
 
@@ -21,7 +22,7 @@ public class DemoSetupService : IRunner
             Id = nodeID,
             Name = "Master",
             Created = DateTimeOffset.UtcNow,
-            Services = NodeServices.PassivePackageProvider | NodeServices.PeerConnectionEstablisher,
+            Features = NodeFeatures.PassivePackageProvider | NodeFeatures.PeerConnectionEstablisher,
             Address = "127.0.0.1",
             LastSeen = DateTimeOffset.UtcNow
         };
@@ -35,5 +36,7 @@ public class DemoSetupService : IRunner
         {
             await _nodeRepository.UpdateAsync(node, knownNode).ConfigureAwait(false);
         }
+
+        Trace.WriteLine($"{nameof(DemoSetupService)} completed");
     }
 }

@@ -23,6 +23,7 @@ internal class Startup
         services.AddSingleton<IConfiguration>(configuration);
 
         services.AddSingleton<IRunner, Listener>();
+        services.AddSingleton<IRunner, WhoAmIService>();
         services.AddSingleton<IRunner, DemoSetupService>();
 
         Trace.Listeners.Add(new ConsoleTraceListener());

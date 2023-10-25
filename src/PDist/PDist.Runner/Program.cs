@@ -17,11 +17,11 @@ internal class Program
 
         var serviceProvider = serviceCollection.BuildServiceProvider(true);
 
-        Console.CancelKeyPress += (_, args) =>
+        Console.CancelKeyPress += (_, eventArgs) =>
         {
             Trace.WriteLine("Canceling...");
             CancellationTokenSource.Cancel();
-            args.Cancel = true;
+            eventArgs.Cancel = true;
         };
 
         var runners = serviceProvider.GetServices<IRunner>();
