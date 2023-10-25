@@ -1,6 +1,7 @@
 ﻿{
   "fruit": "banana",
   "server": {
-    "UdpComListenPort": 7001
+    "UdpComListenPort": 7001,
+    "DbLocation" : "./db/"
   }
 }

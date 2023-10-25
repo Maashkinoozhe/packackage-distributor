@@ -39,6 +39,7 @@ internal class Program
             throw;
         }
 
+        await serviceProvider.DisposeAsync().ConfigureAwait(false);
         Trace.WriteLine("PDist stopped.");
     }
 }

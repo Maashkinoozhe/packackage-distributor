@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-10-24T18:01:53.954Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="i54EJAhwGeRLgpmUaP3u" version="21.8.2" type="device">
+<mxfile host="Electron" modified="2023-10-24T18:06:31.527Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="gBrHRBabgopbJiZupZt6" version="21.8.2" type="device">
   <diagram name="Page-1" id="FrH9_e5uz3nB8ci-CIL4">
-    <mxGraphModel dx="736" dy="861" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1029" dy="1198" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -62,6 +62,9 @@
         </mxCell>
         <mxCell id="eDG3vzUqsvNLsiBRfYn_-5" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;Client/Server S1&lt;/b&gt;&lt;/font&gt;&lt;br&gt;has open firewall" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="120" y="520" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="eDG3vzUqsvNLsiBRfYn_-31" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Functionalities&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;* Report known peers&lt;br&gt;&lt;br&gt;* Report known packages&lt;br&gt;&lt;br&gt;* Initiate connection beween two peers&lt;br&gt;&lt;br&gt;* Initiate sending of Package/Blobs&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="65" y="690" width="230" height="270" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

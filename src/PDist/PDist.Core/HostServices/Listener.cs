@@ -7,12 +7,12 @@ using System.Net.Sockets;
 
 namespace PDist.Core.HostServices;
 
-public class PrimaryRunner : IRunner
+public class Listener : IRunner
 {
     private readonly ServerOptions _serverOptions;
     private UdpClient? UdpListenClient { get; set; }
 
-    public PrimaryRunner(IOptionsMonitor<ServerOptions> optionsMonitor)
+    public Listener(IOptionsMonitor<ServerOptions> optionsMonitor)
     {
         this._serverOptions = optionsMonitor.CurrentValue ?? throw new ArgumentNullException(nameof(optionsMonitor) + "." + nameof(optionsMonitor.CurrentValue));
     }
