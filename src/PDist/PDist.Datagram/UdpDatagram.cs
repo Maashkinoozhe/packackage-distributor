@@ -1,41 +1,60 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
 namespace PDist.Datagram;
 
 public enum DatagramType
 {
-    RequestGetNodeInfo
+    Request,
+    Response,
+    Push
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct UdpDatagram
 {
     public short TypeId;
-    public int SequenceNumber;
-    public short Length;
+    public int JobId;
+    public int SequenceId;
 
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    public byte[] ReturnEndPointAddress;
+    public int ReturnEndPointPort;
+
+    public short PayloadCode;
+    public short Length;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1300)]
     public byte[] Payload;
 
     public DatagramType Type => (DatagramType)TypeId;
+    public IPEndPoint ReturnEndPoint => new(new IPAddress(ReturnEndPointAddress), ReturnEndPointPort);
 
-    public static UdpDatagram Create(DatagramType type , int sequenceNumber, byte[] payload)
+    public static UdpDatagram Create(DatagramType type, int jobId, int sequenceId, IPEndPoint returnEndPoint, short payloadCode, Span<byte> payload)
     {
         if (payload.Length > 1300)
         {
             throw new ArgumentException("Payload too large");
         }
 
+        if (returnEndPoint.AddressFamily != AddressFamily.InterNetwork || returnEndPoint.Address.GetAddressBytes().Length > 4)
+        {
+            throw new ArgumentException("Only ipv4 Endpoints are supported as of now.", nameof(returnEndPoint));
+        }
+
         UdpDatagram data = new()
         {
             TypeId = (short)type,
-            SequenceNumber = sequenceNumber,
+            JobId = jobId,
+            SequenceId = sequenceId,
+            ReturnEndPointAddress = returnEndPoint.Address.GetAddressBytes(),
+            ReturnEndPointPort = returnEndPoint.Port,
+            PayloadCode = payloadCode,
             Payload = new byte[1300],
             Length = (short)payload.Length
         };
 
-        Array.Copy(payload, data.Payload, payload.Length);
+        payload.CopyTo(data.Payload.AsSpan());
 
         return data;
     }
@@ -55,13 +74,6 @@ public struct UdpDatagram
 
     public static UdpDatagram Deserialize(byte[] data)
     {
-        UdpDatagramHeader header = default(UdpDatagramHeader);
-        int headerSize = Marshal.SizeOf(header);
-        IntPtr headerPtr = Marshal.AllocHGlobal(headerSize);
-        Marshal.Copy(data, 0, headerPtr, headerSize);
-        header = (UdpDatagramHeader)Marshal.PtrToStructure(headerPtr, typeof(UdpDatagramHeader));
-        Marshal.FreeHGlobal(headerPtr);
-
         UdpDatagram result = default(UdpDatagram);
         int bodySize = Marshal.SizeOf(result);
 
