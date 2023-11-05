@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace PDist.Datagram;
 
 public enum DatagramType
 {
+    Init,
     Request,
     Response,
     Push
@@ -15,12 +14,9 @@ public enum DatagramType
 public struct UdpDatagram
 {
     public short TypeId;
+    public int SenderNodeId;
     public int JobId;
     public int SequenceId;
-
-    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-    public byte[] ReturnEndPointAddress;
-    public int ReturnEndPointPort;
 
     public short PayloadCode;
     public short Length;
@@ -28,27 +24,20 @@ public struct UdpDatagram
     public byte[] Payload;
 
     public DatagramType Type => (DatagramType)TypeId;
-    public IPEndPoint ReturnEndPoint => new(new IPAddress(ReturnEndPointAddress), ReturnEndPointPort);
 
-    public static UdpDatagram Create(DatagramType type, int jobId, int sequenceId, IPEndPoint returnEndPoint, short payloadCode, Span<byte> payload)
+    public static UdpDatagram Create(DatagramType type, int senderNodeId, int jobId, int sequenceId, short payloadCode, Span<byte> payload)
     {
         if (payload.Length > 1300)
         {
             throw new ArgumentException("Payload too large");
         }
 
-        if (returnEndPoint.AddressFamily != AddressFamily.InterNetwork || returnEndPoint.Address.GetAddressBytes().Length > 4)
-        {
-            throw new ArgumentException("Only ipv4 Endpoints are supported as of now.", nameof(returnEndPoint));
-        }
-
         UdpDatagram data = new()
         {
             TypeId = (short)type,
+            SenderNodeId = senderNodeId,
             JobId = jobId,
             SequenceId = sequenceId,
-            ReturnEndPointAddress = returnEndPoint.Address.GetAddressBytes(),
-            ReturnEndPointPort = returnEndPoint.Port,
             PayloadCode = payloadCode,
             Payload = new byte[1300],
             Length = (short)payload.Length

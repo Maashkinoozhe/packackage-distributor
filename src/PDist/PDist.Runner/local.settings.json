@@ -2,6 +2,8 @@
   "fruit": "banana",
   "server": {
     "UdpComListenPort": 7001,
-    "DbLocation" : "./db/"
+    "DbLocation": "./db/",
+    "NodeId": "1",
+    "MasterAddress" :  "192.168.2.103"
   }
 }

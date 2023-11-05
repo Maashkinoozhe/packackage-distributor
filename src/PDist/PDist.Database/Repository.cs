@@ -24,6 +24,11 @@ public class Repository<T> : IRepository<T>, IAsyncDisposable, IDisposable where
         return _cache.TryGetValue(id, out var item) ? item : null;
     }
 
+    public Task<IEnumerable<T>> ListAsync()
+    {
+        return Task.FromResult(_cache.Values.AsEnumerable());
+    }
+
     public async Task CreateAsync(T item)
     {
         await EnsureLoadedAsync().ConfigureAwait(false);

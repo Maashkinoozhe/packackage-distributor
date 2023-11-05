@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PDist.Core.Configuration;
 using PDist.Core.Contracts;
+using PDist.Core.Extensions;
 using PDist.Core.HostServices;
+using PDist.Core.Services;
 using PDist.Database;
 using PDist.Database.Configuration;
 using PDist.Database.Models;
@@ -31,6 +33,8 @@ internal class Startup
         AddConfigurations(services);
 
         AddRepositories(services);
+
+        AddServices(services);
     }
 
     private void AddConfigurations(IServiceCollection services)
@@ -46,5 +50,12 @@ internal class Startup
         services.AddSingleton<IRepository<PackageRelease>, Repository<PackageRelease>>();
         services.AddSingleton<IRepository<Blob>, Repository<Blob>>();
         services.AddSingleton<IRepository<BlobOccurrence>, Repository<BlobOccurrence>>();
+    }
+
+    private void AddServices(IServiceCollection services)
+    {
+        services.AddSingleton<JobManager>();
+        services.AddSingleton<INetworkService, NetworkService>();
+        services.AddJobProcessors();
     }
 }

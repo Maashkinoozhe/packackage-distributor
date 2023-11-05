@@ -2,19 +2,28 @@
 
 namespace PDist.Datagram;
 
-public class RequestDatagramBuilder
+public class DatagramBuilder
 {
-    private IPEndPoint _endpoint;
+    private int _senderNodeId;
     private object _request;
+    private int? _jobId;
 
-    public void SetReturnEndpoint(IPEndPoint endpoint)
+    public DatagramBuilder SetSenderNodeId(int sender)
     {
-        _endpoint = endpoint;
+        _senderNodeId = sender;
+        return this;
     }
 
-    public void SetRequest<T>(T request)
+    public DatagramBuilder SetPayload<T>(T request)
     {
         _request = request;
+        return this;
+    }
+
+    public DatagramBuilder SetJobId(int id)
+    {
+        _jobId = id;
+        return this;
     }
 
     public IEnumerable<UdpDatagram> GetUdpDatagram()
@@ -24,22 +33,22 @@ public class RequestDatagramBuilder
         var totalBytes = payload.Length;
         var bytesPacked = 0;
 
-        var jobId = new Random((int)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()).Next();
+        var jobId = _jobId ?? new Random((int)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()).Next();
 
         for (int i = 0; bytesPacked < totalBytes; i++)
         {
-            int payloadStart = bytesPacked + 1;
+            int payloadStart = bytesPacked;
             int payloadEnd = payloadStart + Math.Min(totalBytes - bytesPacked, 1300);
 
             yield return UdpDatagram.Create(
                 DatagramType.Request,
+                _senderNodeId,
                 jobId,
                 i,
-                _endpoint,
                 payloadCode,
                 new Span<byte>(payload, payloadStart, payloadEnd)
             );
-            bytesPacked = payloadEnd;
+            bytesPacked = payloadEnd+1;
         }
     }
 }
