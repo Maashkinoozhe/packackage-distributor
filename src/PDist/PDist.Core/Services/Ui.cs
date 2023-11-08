@@ -18,9 +18,14 @@ public class Ui
 
     public async void Run()
     {
+        Thread.Sleep(1000);
         while (true)
         {
-            Dictionary<string, string> actions = new Dictionary<string, string>() { { "0", "GetNodes" } };
+            Dictionary<string, string> actions = new Dictionary<string, string>()
+            {
+                { "0", "GetNodes" },
+                { "1", "AddPackage" }
+            };
             Console.WriteLine("");
             Console.WriteLine("======= PDist UI =======");
             foreach (var action in actions)
@@ -28,13 +33,17 @@ public class Ui
                 Console.WriteLine($"   {$">{action.Key}<",3} - {action.Value}");
             }
             Console.WriteLine("");
-            Console.WriteLine("Select an action please: ");
+            Console.Write("Select an action please: ");
 
             string? readLine = Console.ReadLine();
 
             if (readLine == "0")
             {
                 await ListPackagesAsync().ConfigureAwait(false);
+            }
+            if (readLine == "1")
+            {
+                await AddPackageAsync().ConfigureAwait(false);
             }
         }
     }
@@ -48,6 +57,11 @@ public class Ui
         await udpClient.SendAsync(initialtor.Serialize(), new IPEndPoint(IPAddress.Parse("127.0.0.1"), _serverOption.UdpComListenPort)).ConfigureAwait(false);
         var response = await udpClient.ReceiveAsync().ConfigureAwait(false);
         Console.WriteLine(Encoding.UTF8.GetString(UdpDatagram.Deserialize(response.Buffer).Payload));
+    }
+
+    private async Task AddPackageAsync()
+    {
+        throw new NotImplementedException();
     }
 
     private UdpClient? _client { get; set; }
