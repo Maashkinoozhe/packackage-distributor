@@ -1,12 +1,29 @@
 # packackage-distributor
 Simple .NET application for distributing file packages between clients.
 
-# Services
+## Commands
+List of commands that are used for communication between the nodes.
 
-## Router
-Service that will listen on a udp port and receive packages.
-It will insprect the nature of the package and will foreword it to the matching receiver.
+- GetNodes
+  - Returns a list of known Nodes
 
-## CommandListener
-Service will received messages from the router.
-It will receive commands and will process them.
+- GetPackages
+  - Returns a list of packages and revisions
+  - Contains Package and revision information
+  - Contains some revision metadata like expected size, number of blobs
+
+- GetPackage
+  - Returns all package/revision blobs and BlobOccurrences
+
+- PushBlob
+  - Instructs a node to send back a given blob
+
+- InitiateConnection
+  - Instructs a node 1 (most likely master) with connection to another node 2 to negotiate hole punching with me (node 0)
+  - node 0 instructs node 1, node 1 will instruct node 2 to connect with node 2
+
+- StartConnecting
+  - Node 1 instructs node 2 to connect with node 0
+
+- RegisterNode
+  - Lets a node announce it self with master, or any other node and transmit basic node information.
